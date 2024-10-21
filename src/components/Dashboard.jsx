@@ -14,26 +14,80 @@ export default function Dashboard() {
   const [cryptoData, setCryptoData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const [totalPages, setTotalPages] = useState(10); // Store total pages
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  const loadCryptoData = async (page) => {
+    setLoading(true);
+    const data = await fetchCryptoData(page);
+    setCryptoData(data);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const getData = async () => {
-      const data = await fetchCryptoData(); // Fetch the data
-      setCryptoData(data); // Store the data in state
-      setLoading(false); // Set loading to false
-    };
+    loadCryptoData(currentPage); // Load data when component mounts or page changes
+  }, [currentPage]);
 
-    getData();
-  }, []); // Fetch data only once on component mount
-
-  if (loading) return <p>Loading...</p>; // Show loading state
-  const filteredData = cryptoData.filter(coin =>
-    coin.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+  const filteredData = cryptoData.filter((coin) =>
+    coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handlePageChange = (page) => setCurrentPage(page);
+
+  const renderPageNumbers = () => {
+    const pages = [];
+    const totalPageButtons = 5; // Show only 5 page buttons at a time
+
+    let startPage = Math.max(1, currentPage - Math.floor(totalPageButtons / 2));
+    let endPage = Math.min(totalPages, startPage + totalPageButtons - 1);
+
+    if (endPage - startPage < totalPageButtons - 1) {
+      startPage = Math.max(1, endPage - totalPageButtons + 1);
+    }
+
+    // Generate the buttons dynamically
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-3 py-1 mx-1 rounded ${
+            currentPage === i ? "bg-yellow-500 text-white" : "bg-gray-200"
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return (
+      <>
+        {startPage > 1 && (
+          <button
+            onClick={() => handlePageChange(1)}
+            className="px-3 py-1 mx-1 rounded bg-gray-200"
+          >
+            1
+          </button>
+        )}
+        {startPage > 2 && <span className="mx-1">...</span>}
+        {pages}
+        {endPage < totalPages - 1 && <span className="mx-1">...</span>}
+        {endPage < totalPages && (
+          <button
+            onClick={() => handlePageChange(totalPages)}
+            className="px-3 py-1 mx-1 rounded bg-gray-200"
+          >
+            {totalPages}
+          </button>
+        )}
+      </>
+    );
+  };
 
   return (
     <div>
@@ -198,6 +252,8 @@ export default function Dashboard() {
             </ul>
           </div>
         </TabPanel>
+        <div className="flex justify-center m-4">{renderPageNumbers()}</div>
+
       </TabContext>
     </div>
   );
