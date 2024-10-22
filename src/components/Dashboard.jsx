@@ -2,12 +2,17 @@ import "../index.css";
 import { useState, useEffect } from "react";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { fetchCryptoData } from "../data";
+import BackToTopButton from "./BackToTop";
+import { Link } from "react-router-dom";
+import Brightness4Icon from '@mui/icons-material/Brightness4';  
+import Brightness7Icon from '@mui/icons-material/Brightness7'; 
+
 
 export default function Dashboard() {
   const [value, setValue] = useState("grid");
@@ -16,6 +21,7 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1); // Track current page
   const [totalPages, setTotalPages] = useState(10); // Store total pages
+  const [darkMode, setDarkMode] = useState(false); 
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -28,13 +34,27 @@ export default function Dashboard() {
     setLoading(false);
   };
 
+  // Dark mode effect
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark'); // Enable dark mode
+    } else {
+      document.documentElement.classList.remove('dark'); // Disable dark mode
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   useEffect(() => {
     loadCryptoData(currentPage); // Load data when component mounts or page changes
   }, [currentPage]);
 
-  const filteredData = cryptoData.filter((coin) =>
-    coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = cryptoData.filter(
+    (coin) =>
+      coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handlePageChange = (page) => setCurrentPage(page);
@@ -90,8 +110,14 @@ export default function Dashboard() {
   };
 
   return (
-    <div>
-        <div className="m-4">
+    <div >
+  {loading ? (
+    <div className="flex justify-center items-center h-screen">
+      <CircularProgress />
+    </div>
+  ) : (
+    <div >
+      <div className="m-4 flex">
         <input
           type="text"
           placeholder="Search..."
@@ -99,6 +125,12 @@ export default function Dashboard() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="border rounded-md p-2 w-full md:w-1/2 lg:w-1/2"
         />
+        <button
+        onClick={toggleDarkMode}
+        className="p-2 bg-gray-300 rounded-full dark:bg-gray-700 text-black dark:text-white"
+      >
+        {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+      </button>
       </div>
       <TabContext value={value}>
         <TabList onChange={handleChange} variant="fullWidth">
@@ -109,15 +141,16 @@ export default function Dashboard() {
         <TabPanel value="grid">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredData.map((coin) => (
+              <Link to={`/coin/${coin.id}`} className="text-black" key={coin.id}>
               <div
                 key={coin.id}
                 className={`bg-white rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105 
-          ${
-            coin.price_change_percentage_24h > 0
-              ? "hover:border-green-600"
-              : "hover:border-red-600"
-          } 
-          border-2 border-transparent hover:border-opacity-100`}
+              ${
+                coin.price_change_percentage_24h > 0
+                  ? "hover:border-green-600"
+                  : "hover:border-red-600"
+              } 
+              border-2 border-transparent hover:border-opacity-100`}
               >
                 <div className="flex items-center mb-4">
                   <img
@@ -175,6 +208,7 @@ export default function Dashboard() {
                   </span>
                 </p>
               </div>
+              </Link>
             ))}
           </div>
         </TabPanel>
@@ -183,6 +217,7 @@ export default function Dashboard() {
           <div className="overflow-x-auto">
             <ul className="space-y-4">
               {filteredData.map((coin) => (
+                <Link to={`/coin/${coin.id}`} className="text-black" key={coin.id}>
                 <li
                   key={coin.id}
                   className={`bg-white rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105 
@@ -248,13 +283,17 @@ export default function Dashboard() {
                     </span>
                   </p>
                 </li>
+                </Link>
               ))}
             </ul>
           </div>
         </TabPanel>
         <div className="flex justify-center m-4">{renderPageNumbers()}</div>
-
       </TabContext>
+      <BackToTopButton />
     </div>
+  )}
+ </div>
+
   );
 }
