@@ -6,6 +6,7 @@ import SecurityIcon from "@mui/icons-material/Security";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import { motion } from "framer-motion";
 import SwitchRightIcon from "@mui/icons-material/SwitchRight";
+import logo from '../assets/cryptify-logo.png'
 
 //links
 const navLinks = [
@@ -49,7 +50,7 @@ const Sidebar = () => {
       animate={isExpanded ? "expanded" : "collapsed"}
       variants={variants}
       className={
-        "py-12 flex flex-col border border-r-1 w-1/5 relative dark:text-darktheme-text dark:bg-darktheme-background" +
+        "hidden lg:block py-12 flex-col border-r-1 w-1/5 h-full relative " +
         (isExpanded ? " px-10" : " px-[16px] duration-500")
       }
     >
@@ -61,7 +62,7 @@ const Sidebar = () => {
       </div>
 
       <div className="flex items-center ">
-        <h1>C</h1>
+        <img src={logo} alt="cryptify" className="w-[60px] pr-4"/>
         <span className={isExpanded ? "block" : "hidden"}> Cryptify</span>
       </div>
 
@@ -70,7 +71,7 @@ const Sidebar = () => {
           <li
             key={index}
             className={
-              "flex items-center mt-4 cursor-pointer space-x-2" +
+              "flex items-center mt-4 cursor-pointer space-x-1" +
               (activeLink === index
                 ? " bg-yellow-600 text-white rounded-lg font-semibold dark:bg-yellow-800"
                 : "") +

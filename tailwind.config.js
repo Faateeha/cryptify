@@ -4,7 +4,20 @@ export default {
   ],
   darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#faf8f7",
+        dark: '#1a202c',
+        text: '#000',
+
+        darktheme: {
+          primary: '#1a202c',
+          secondary: '#2d3748',
+          text: '#f7fafc',
+          background: '#2d3748',
+        }
+      }
+    },
   },
   plugins: [],
 };

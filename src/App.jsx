@@ -18,7 +18,7 @@ function App() {
   }, [darkMode]);
 
   return (
-    <div className={`flex w-full h-screen ${darkMode ? 'dark' : ''}`}>
+    <div className={`flex w-full h-full dark:text-darktheme-text dark:bg-darktheme-background`}>
       {/* Sidebar with fixed width */}
       <Sidebar className="w-1/4 h-full" />
       

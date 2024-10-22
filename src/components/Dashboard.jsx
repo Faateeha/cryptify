@@ -12,6 +12,8 @@ import BackToTopButton from "./BackToTop";
 import { Link } from "react-router-dom";
 import Brightness4Icon from '@mui/icons-material/Brightness4';  
 import Brightness7Icon from '@mui/icons-material/Brightness7'; 
+import logo from '../assets/cryptify-logo.png'
+import Footer from './Footer'
 
 
 export default function Dashboard() {
@@ -89,7 +91,7 @@ export default function Dashboard() {
         {startPage > 1 && (
           <button
             onClick={() => handlePageChange(1)}
-            className="px-3 py-1 mx-1 rounded bg-gray-200"
+            className="px-3 py-1 mx-1 rounded "
           >
             1
           </button>
@@ -100,7 +102,7 @@ export default function Dashboard() {
         {endPage < totalPages && (
           <button
             onClick={() => handlePageChange(totalPages)}
-            className="px-3 py-1 mx-1 rounded bg-gray-200"
+            className="px-3 py-1 mx-1 rounded "
           >
             {totalPages}
           </button>
@@ -116,14 +118,16 @@ export default function Dashboard() {
       <CircularProgress />
     </div>
   ) : (
-    <div >
-      <div className="m-4 flex">
+    <div className="dark:text-darktheme-text dark:bg-darktheme-background">
+      
+      <div className="py-6 px-3 flex justify-between">
+      <img src={logo} alt="logo" className=" lg:hidden w-[10%] md:w-[5%]"/>
         <input
           type="text"
           placeholder="Search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="border rounded-md p-2 w-full md:w-1/2 lg:w-1/2"
+          className="border rounded-md pl-2 w-120px  md:w-1/2 lg:w-1/2 dark:bg-darktheme-background"
         />
         <button
         onClick={toggleDarkMode}
@@ -141,10 +145,10 @@ export default function Dashboard() {
         <TabPanel value="grid">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredData.map((coin) => (
-              <Link to={`/coin/${coin.id}`} className="text-black" key={coin.id}>
+              <Link to={`/coin/${coin.id}`} className="" key={coin.id}>
               <div
                 key={coin.id}
-                className={`bg-white rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105 
+                className={` rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105 
               ${
                 coin.price_change_percentage_24h > 0
                   ? "hover:border-green-600"
@@ -159,10 +163,10 @@ export default function Dashboard() {
                     className="h-16 w-16 mr-4"
                   />
                   <div>
-                    <strong className="text-xl text-gray-800">
+                    <strong className="text-xl ">
                       {coin.name}
                     </strong>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm ">
                       {coin.symbol.toUpperCase()}
                     </p>
                   </div>
@@ -195,13 +199,13 @@ export default function Dashboard() {
                   </span>
                 </p>
 
-                <p className="text-sm text-gray-600 mb-1">
+                <p className="text-sm mb-1">
                   Total Volume:{" "}
                   <span className="font-semibold">
                     ${coin.total_volume.toLocaleString()}
                   </span>
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm ">
                   Market Cap:{" "}
                   <span className="font-semibold">
                     ${coin.market_cap.toLocaleString()}
@@ -217,10 +221,10 @@ export default function Dashboard() {
           <div className="overflow-x-auto">
             <ul className="space-y-4">
               {filteredData.map((coin) => (
-                <Link to={`/coin/${coin.id}`} className="text-black" key={coin.id}>
+                <Link to={`/coin/${coin.id}`} className="" key={coin.id}>
                 <li
                   key={coin.id}
-                  className={`bg-white rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105 
+                  className={` rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105 
             ${
               coin.price_change_percentage_24h > 0
                 ? "hover:border-green-600"
@@ -235,10 +239,10 @@ export default function Dashboard() {
                       className="h-16 w-16 mr-4"
                     />
                     <div>
-                      <strong className="text-xl text-gray-800">
+                      <strong className="text-xl ">
                         {coin.name}
                       </strong>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm ">
                         {coin.symbol.toUpperCase()}
                       </p>
                     </div>
@@ -270,13 +274,13 @@ export default function Dashboard() {
                       ${coin.current_price.toLocaleString()}
                     </span>
                   </p>
-                  <p className="text-sm text-gray-600 mb-1 hidden md:block">
+                  <p className="text-sm  mb-1 hidden md:block">
                     Total Volume:{" "}
                     <span className="font-semibold">
                       ${coin.total_volume.toLocaleString()}
                     </span>
                   </p>
-                  <p className="text-sm text-gray-600 hidden lg:block">
+                  <p className="text-sm  hidden lg:block">
                     Market Cap:{" "}
                     <span className="font-semibold">
                       ${coin.market_cap.toLocaleString()}
@@ -290,6 +294,7 @@ export default function Dashboard() {
         </TabPanel>
         <div className="flex justify-center m-4">{renderPageNumbers()}</div>
       </TabContext>
+      <Footer />
       <BackToTopButton />
     </div>
   )}
