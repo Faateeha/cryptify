@@ -131,7 +131,7 @@ export default function Dashboard() {
         />
         <button
         onClick={toggleDarkMode}
-        className="p-2 bg-gray-300 rounded-full dark:bg-gray-700 text-black dark:text-white"
+        className="p-2 bg-yellow-500 rounded-full dark:bg-yellow-700 text-black dark:text-white"
       >
         {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
       </button>
