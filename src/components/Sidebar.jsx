@@ -64,7 +64,7 @@ const Sidebar = () => {
       <div className="flex items-center ">
         <img src={logo} alt="cryptify" className="w-[60px] pr-4"/>
         
-        <span className={`${isExpanded ? 'block' : 'hidden'} text-yellow-500 font-bold text-7xl`}>
+        <span className={`${isExpanded ? 'block' : 'hidden'} text-yellow-500 font-bold text-3xl`}>
     Cryptify
   </span>
       </div>
