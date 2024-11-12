@@ -11,10 +11,10 @@ export default function SelectDays({ days, handleDaysChange }) {
         sx={{
           height: "2.5rem",
           "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "",
+            borderColor: "white",
           },
           "& .MuiSelect-root": {
-            color: "",
+            color: "white",
           },
           "&:hover": {
             "&& fieldset": { borderColor: "white" },
@@ -23,6 +23,7 @@ export default function SelectDays({ days, handleDaysChange }) {
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         value={days}
+        color="white"
         label="Days"
         onChange={handleDaysChange}
       >
