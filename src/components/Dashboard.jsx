@@ -1,5 +1,5 @@
 import "../index.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -12,8 +12,10 @@ import BackToTopButton from "./BackToTop";
 import { Link } from "react-router-dom";
 import Brightness4Icon from '@mui/icons-material/Brightness4';  
 import Brightness7Icon from '@mui/icons-material/Brightness7'; 
-import logo from '../assets/cryptify-logo.png'
 import Footer from './Footer'
+import { Close } from "@mui/icons-material";
+import { DarkModeContext } from "../App";
+
 
 
 export default function Dashboard() {
@@ -23,7 +25,12 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1); // Track current page
   const [totalPages, setTotalPages] = useState(10); // Store total pages
-  const [darkMode, setDarkMode] = useState(false); 
+
+  const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
+
+  const clearSearch = () => {
+    setSearchQuery("");
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -36,18 +43,6 @@ export default function Dashboard() {
     setLoading(false);
   };
 
-  // Dark mode effect
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark'); // Enable dark mode
-    } else {
-      document.documentElement.classList.remove('dark'); // Disable dark mode
-    }
-  }, [darkMode]);
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
 
   useEffect(() => {
     loadCryptoData(currentPage); // Load data when component mounts or page changes
@@ -120,15 +115,27 @@ export default function Dashboard() {
   ) : (
     <div className="dark:text-darktheme-text dark:bg-darktheme-background">
       
-      <div className="py-6 px-3 flex justify-between">
-      <img src={logo} alt="logo" className=" lg:hidden w-[10%] md:w-[5%]"/>
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="border rounded-md pl-2 w-120px  md:w-1/2 lg:w-1/2 dark:bg-darktheme-background"
-        />
+      <div className="py-6 pl-[4rem] pr-[1rem] flex justify-between">
+      
+      <div className="relative w-full md:w-1/2 lg:w-1/2 ">
+      {/* Input Field */}
+      <input
+        type="text"
+        placeholder="Search..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="border rounded-md pl-2 pr-10 py-1.5 w-full dark:bg-darktheme-background"
+      />
+      {/* Clear Button */}
+      {searchQuery && (
+        <button
+          onClick={clearSearch}
+          className="absolute right-2 top-4 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+        >
+          <Close fontSize="small" />
+        </button>
+      )}
+    </div>
         <button
         onClick={toggleDarkMode}
         className="p-2 bg-yellow-500 rounded-full dark:bg-yellow-700 text-black dark:text-white"
